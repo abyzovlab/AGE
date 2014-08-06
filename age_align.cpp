@@ -362,5 +362,5 @@ int main(int argc,char *argv[])
   Sequence::deleteSequences(old_seq1);
   Sequence::deleteSequences(old_seq2);
 
-  return 1;
+  return 0;
 }
