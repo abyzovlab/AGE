@@ -70,7 +70,7 @@ Options:
 -mismatch		score for nucleotide mismatch
 -go=value		gap open penalty, negative value
 -ge=value		gap extend penalty, negative value
-
+-allpos			always display boundary positions
 
 Examples:
 

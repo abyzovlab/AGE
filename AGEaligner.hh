@@ -74,9 +74,11 @@ public:
   const static int INVERSION_FLAG    = 0x04;
   const static int INVR_FLAG         = 0x08;
   const static int INVL_FLAG         = 0x10;
+  const static int SHOW_ALL_POS      = 0x20;
 private:
-  const static int ALL_FLAGS         = INDEL_FLAG | TDUPLICATION_FLAG |
+  const static int ALL_MODES         = INDEL_FLAG | TDUPLICATION_FLAG |
     INVERSION_FLAG | INVR_FLAG | INVL_FLAG;
+  const static int ALL_DISP_OPTS     = SHOW_ALL_POS;
 
 private:
   Sequence       &_s1,  *_s1_rc,  &_s2;    // Sequences with headers
@@ -88,6 +90,7 @@ private:
   int            score_n1, score_n2;       // Dimensions of scoring matrices
   long           score_size;               // Size of scoring matrices
   int            _flag;                    // Flag defining alignment mode
+  int            _disp_opts;               // Flag defining display options
   AGEaligner     *_aux_aligner;            // Auxilary aligner
 
   // Coordiantes of the excised retion: left1, left2, right1, right2

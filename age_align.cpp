@@ -97,7 +97,7 @@ int main(int argc,char *argv[])
   string usage = "Usage:\n\t";
   usage += exe; usage += "\n";
   sout.str("");sout<<DEFAULT_MATCH;
-  usage += "\t\t[-version]\n";
+  usage += "\t\t[-version] [-allpos]\n";
   usage += "\t\t[-indel|-tdup|-inv|-invl|-invr]\n";
   usage += "\t\t[-match=value:"; usage += sout.str(); usage += "]";
   sout.str("");sout<<DEFAULT_MISMATCH;
@@ -221,6 +221,8 @@ int main(int argc,char *argv[])
 	  }
 	} else if (option == "-version") {
 	  version = true;
+	} else if (option == "-allpos") {
+	  flag |= AGEaligner::SHOW_ALL_POS;
 	} else if (option == "-indel") {
 	  flag |= AGEaligner::INDEL_FLAG;
 	} else if (option == "-inv") {
@@ -263,8 +265,6 @@ int main(int argc,char *argv[])
       return 0;
     }
 
-    if (flag == 0) flag = AGEaligner::INDEL_FLAG;
-
     int n_modes = 0;
     if (flag & AGEaligner::INDEL_FLAG)        n_modes++;
     if (flag & AGEaligner::TDUPLICATION_FLAG) n_modes++;
@@ -272,12 +272,10 @@ int main(int argc,char *argv[])
     if (flag & AGEaligner::INVL_FLAG)         n_modes++;
     if (flag & AGEaligner::INVERSION_FLAG)    n_modes++;
 
-    if (n_modes != 1) {
-      cerr<<"Error in mode specification. ";
-      if (n_modes == 0)
-	cerr<<"No mode is specified."<<endl;
-      if (n_modes > 1)
-	cerr<<"More than one mode is specified."<<endl;
+    if (n_modes == 0)
+      flag |= AGEaligner::INDEL_FLAG;
+    if (n_modes > 1) {
+      cerr<<"Error: More than one mode is specified."<<endl;
       error = true;
     }
 
