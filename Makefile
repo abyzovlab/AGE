@@ -2,7 +2,7 @@ VERSION = v0.4
 DEFAULT_FLAGS = -DAGE_VERSION=\"$(VERSION)\" -DAGE_TIME
 CXX	= g++ -fopenmp -DOMP $(DEFAULT_FLAGS)
 
-MESS = "Compiling with parallel support."
+MESS = "Compiling with parallel (OpenMP) support."
 ifeq ($(OMP),no)
         CXX  = g++ $(DEFAULT_FLAGS)
 	MESS = "Compiling with NO parallel support."

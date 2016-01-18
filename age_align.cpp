@@ -84,10 +84,10 @@ int parseArgs(string line,string *args,int max_args)
 
 int main(int argc,char *argv[])
 {
-  const static short DEFAULT_MATCH      =  1;
-  const static short DEFAULT_MISMATCH   = -2;
-  const static short DEFAULT_GAP_OPEN   = -2;
-  const static short DEFAULT_GAP_EXTEND = -1;
+  const static short DEFAULT_MATCH      =   1;
+  const static short DEFAULT_MISMATCH   =  -3;
+  const static short DEFAULT_GAP_OPEN   =  -7;
+  const static short DEFAULT_GAP_EXTEND =  -1;
 
   int flag = 0;
   stringstream sout;
