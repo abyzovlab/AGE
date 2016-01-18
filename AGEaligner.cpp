@@ -66,14 +66,15 @@ bool AGEaligner::align(Scorer &scr,int flag)
 {
   _n_bpoints = 0; // Erase previous break points
   if (_len1 <= 0 || _len2 <= 0) return false;
-  if (!(flag & ALL_FLAGS)) return false;
+  if (!(flag & ALL_MODES)) return false;
 
   // Deciding on whether need to use auxiliary aligner
   int aux_flag = 0;
-  _flag = flag;
+  _flag = flag & ALL_MODES;
+  _disp_opts = flag & ALL_DISP_OPTS;
   if (flag & INVERSION_FLAG) {
     _flag    = INVL_FLAG;
-    aux_flag = INVR_FLAG;
+    aux_flag = INVR_FLAG | _disp_opts;
   }
 
 #ifdef AGE_TIME
@@ -276,14 +277,14 @@ void AGEaligner::printAlignment()
       cout<<" first  seq => ";
       len = abs(s - e - inc1);
       cout<<setw(9)<<len<<" nucs";
-      if (len > 0) cout<<" ["<<s<<","<<e<<"]";
+      if (len > 0 || _disp_opts & SHOW_ALL_POS) cout<<" ["<<s<<","<<e<<"]";
       cout<<endl;
       cout<<" second seq => ";
       s = f->end2() + inc2;
       e = f->next()->start2() - inc2;
       len = abs(s - e - inc2);
       cout<<setw(9)<<len<<" nucs";
-      if (len > 0) cout<<" ["<<s<<","<<e<<"]";
+      if (len > 0 || _disp_opts & SHOW_ALL_POS) cout<<" ["<<s<<","<<e<<"]";
       cout<<endl;
     }
 
@@ -296,14 +297,14 @@ void AGEaligner::printAlignment()
 	cout<<" first  seq => ";
 	len = abs(s - e - inc1);
 	cout<<setw(9)<<len<<" nucs";
-	if (len > 0) cout<<" ["<<s<<","<<e<<"]";
+	if (len > 0 || _disp_opts & SHOW_ALL_POS) cout<<" ["<<s<<","<<e<<"]";
 	cout<<endl;
 	cout<<" second seq => ";
 	s = f->end2() + inc2;
 	e = f->next()->start2() - inc2;
 	len = abs(s - e - inc2);
 	cout<<setw(9)<<len<<" nucs";
-	if (len > 0) cout<<" ["<<s<<","<<e<<"]";
+	if (len > 0 || _disp_opts & SHOW_ALL_POS) cout<<" ["<<s<<","<<e<<"]";
 	cout<<endl;
       }
       break;
@@ -317,7 +318,7 @@ void AGEaligner::printAlignment()
       int bp1 = inc1*(s - _s1.start()), bp2 = inc1*(e - _s1.start());
       int n_hom = calcIdentity(_seq1,bp1,bp2,left,right);
       cout<<" first  seq => "<<setw(9)<<n_hom<<" nucs";
-      if (n_hom > 0)
+      if (n_hom > 0 || _disp_opts & SHOW_ALL_POS)
 	cout<<" ["<<s + inc1*left<<","<<s + inc1*(right - 1)<<"] to"
 	    <<" ["<<e + inc1*left<<","<<e + inc1*(right - 1)<<"]";
       cout<<endl;
@@ -325,7 +326,7 @@ void AGEaligner::printAlignment()
       bp1 = inc2*(s - _s2.start()), bp2 = inc2*(e - _s2.start());
       n_hom = calcIdentity(_seq2,bp1,bp2,left,right);
       cout<<" second seq => "<<setw(9)<<n_hom<<" nucs";
-      if (n_hom > 0)
+      if (n_hom > 0 || _disp_opts & SHOW_ALL_POS)
 	cout<<" ["<<s + inc2*left<<","<<s + inc2*(right - 1)<<"] to"
 	    <<" ["<<e + inc2*left<<","<<e + inc2*(right - 1)<<"]";
       cout<<endl;
@@ -337,7 +338,7 @@ void AGEaligner::printAlignment()
       int bp1 = inc1*(s - _s1.start()), bp2 = inc1*(e - _s1.start());
       int n_hom = calcOutsideIdentity(_seq1,bp1,bp2);
       cout<<" first  seq => "<<setw(9)<<n_hom<<" nucs";
-      if (n_hom > 0)
+      if (n_hom > 0 || _disp_opts & SHOW_ALL_POS)
 	cout<<" ["<<s - inc1*(n_hom - 1)<<","<<s<<"] to"
 	    <<" ["<<e<<","<<e + inc1*(n_hom - 1)<<"]";
       cout<<endl;
@@ -345,7 +346,7 @@ void AGEaligner::printAlignment()
       bp1 = inc2*(s - _s2.start()), bp2 = inc2*(e - _s2.start());
       n_hom = calcOutsideIdentity(_seq2,bp1,bp2);
       cout<<" second seq => "<<setw(9)<<n_hom<<" nucs";
-      if (n_hom > 0)
+      if (n_hom > 0 || _disp_opts & SHOW_ALL_POS)
 	cout<<" ["<<s - inc2*(n_hom - 1)<<","<<s<<"] to"
 	    <<" ["<<e<<","<<e + inc2*(n_hom - 1)<<"]";
       cout<<endl;
@@ -357,7 +358,7 @@ void AGEaligner::printAlignment()
       int bp1 = inc1*(s - _s1.start()), bp2 = inc1*(e - _s1.start());
       int n_hom = calcInsideIdentity(_seq1,bp1,bp2);
       cout<<" first  seq => "<<setw(9)<<n_hom<<" nucs";
-      if (n_hom > 0)
+      if (n_hom > 0 || _disp_opts & SHOW_ALL_POS)
 	cout<<" ["<<s<<","<<s + inc1*(n_hom - 1)<<"] to"
 	    <<" ["<<e - inc1*(n_hom - 1)<<","<<e<<"]";
       cout<<endl;
@@ -365,7 +366,7 @@ void AGEaligner::printAlignment()
       bp1 = inc2*(s - _s2.start()), bp2 = inc2*(e - _s2.start());
       n_hom = calcInsideIdentity(_seq2,bp1,bp2);
       cout<<" second seq => "<<setw(9)<<n_hom<<" nucs";
-      if (n_hom > 0)
+      if (n_hom > 0 || _disp_opts & SHOW_ALL_POS)
 	cout<<" ["<<s<<","<<s + inc2*(n_hom - 1)<<"] to"
 	    <<" ["<<e - inc2*(n_hom - 1)<<","<<e<<"]";
       cout<<endl;
