@@ -44,6 +44,10 @@ the allele containing this deletion, one may use the following command
 i.e. align conting to the the predicted region extended by 1 kb downstream and
 upstream.
 
+The penalty model used for determining the cost of insertions and deletions is 
+the affine gap model. The gap penalty function G(i) is defined
+as G(i) = go + (ge x i). Note that when there is a single gap then G(i) = go + ge
+
 Help:
 $ ./age_align
 
@@ -71,6 +75,7 @@ Options:
 -go=value		gap open penalty, negative value
 -ge=value		gap extend penalty, negative value
 -allpos			always display boundary positions
+-berg			align the sequences using Hirschberg's linear memory algorithm
 
 Examples:
 
@@ -86,4 +91,4 @@ Examples:
 
 
 
-Please send your comments and suggestions to alexej.abyzov@yale.edu.
+Please send your comments and suggestions to alexej.abyzov@mayo.edu.
